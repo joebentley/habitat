@@ -1,0 +1,16 @@
+{
+  "name": "habitat",
+  "version": "0.0.1",
+  "main": "index.js",
+  "author": "Joe Bentley <jbentley@star.sr.bham.ac.uk>",
+  "license": "MIT",
+  "devDependencies": {
+    "eslint": "^5.2.0"
+  },
+  "dependencies": {
+    "express": "^4.16.3"
+  },
+  "scripts": {
+    "start": "node index.js"
+  }
+}
