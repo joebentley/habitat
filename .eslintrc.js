@@ -5,10 +5,16 @@ module.exports = {
     "es6": true,
     "node": true
   },
+  "plugins": [
+    "react"
+  ],
   "extends": "eslint:recommended",
   "parserOptions": {
     "ecmaVersion": 2018,
-    "sourceType": "module"
+    "sourceType": "module",
+    "ecmaFeatures": {
+      "jsx": true
+    }
   },
   "rules": {
     "indent": [
@@ -26,9 +32,8 @@ module.exports = {
     "semi": [
       "error",
       "always"
-    ]
-  },
-  "plugins": [
-    "react"
-  ]
+    ],
+    "react/jsx-uses-react": "error",
+    "react/jsx-uses-vars": "error"
+  }
 };
