@@ -39,6 +39,21 @@ body {
   font-size: 10pt;
 }
 
+#color-box-container {
+  margin-top: 1em;
+  display: flex;
+}
+
+.color-box {
+  width: 1em;
+  height: 1em;
+  border: 2px solid darkslategrey;
+}
+
+.color-box-chosen {
+  border: 2px solid white;
+}
+
 #username-modal .submit-button {
   margin-top: 1em;
 }
@@ -57,15 +72,9 @@ body {
 
 .message {
   color: ghostwhite;
-  background-color: darkgreen;
   padding: 0.2em 0.4em 0.2em 0.4em;
   border-radius: 10px;
   border: solid black 1px;
-}
-
-.message-2 {
-  background-color: darkred;
-  text-align: right;
 }
 
 #message-form {
@@ -111,6 +120,7 @@ body {
 
 #status-bar {
   font-size: 10pt;
+  margin-left: 0.2em;
 }
 
 #app-flex {

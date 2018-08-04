@@ -10,65 +10,12 @@ window.onload = () => {
 
 const exampleMessages = [
   {
+    'color': 'darkgreen',
     'author': 'Joe',
     'message': 'Hello Marie!'
   },
   {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },
-  {
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },
-  {
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },
-  {
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },{
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },
-  {
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },
-  {
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  },
-  {
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
+    'color': 'darkred',
     'author': 'Marie',
     'message': 'Hello Joe, how are you?'
   }
@@ -89,15 +36,10 @@ class Messages extends React.Component {
 
   render() {
     let messages = this.props.messages.map((message, id) => {
-      let messageContent = message.message;
-      if (id % 2 === 0) {
-        messageContent = `${messageContent} :${message.author}`;
-      } else {
-        messageContent = `${message.author}: ${messageContent}`;
-      }
+      let messageContent = `${message.author}: ${message.message}`;
 
       return (
-        <li key={id} className={'message' + (id % 2 === 0 ? ' message-2' : '')}>
+        <li key={id} className={'message'} style={{backgroundColor: message.color}}>
           {messageContent}
         </li>
       );
@@ -161,12 +103,36 @@ class GameArea extends React.Component {
   }
 }
 
+class ColorChooser extends React.Component {
+  render() {
+    let colorBoxes = this.props.colors.map((color, index) => {
+      return (
+        <div
+          key={index}
+          style={{backgroundColor: color}}
+          onClick={() => this.props.onClick(index)}
+          className={'color-box' + (this.props.chosenIndex === index ? ' color-box-chosen' : '')}
+        />
+      );
+    });
+
+    return (
+      <div id="color-box-container">
+        {colorBoxes}
+      </div>
+    );
+  }
+}
+
 class UsernameModal extends React.Component {
   constructor(props) {
     super(props);
 
+    this.allowedColors = ['darkgreen', 'darkred', 'blue', 'magenta'];
+
     this.state = {
-      username: ''
+      username: '',
+      chosenColorIndex: 0
     };
   }
 
@@ -188,7 +154,11 @@ class UsernameModal extends React.Component {
       return;
 
     this.setState({username: ''});
-    this.props.onSubmit(username);
+    this.props.onSubmit(username, this.allowedColors[this.state.chosenColorIndex]);
+  }
+
+  handleColorChange(index) {
+    this.setState({chosenColorIndex: index});
   }
 
   render() {
@@ -205,6 +175,11 @@ class UsernameModal extends React.Component {
               value={this.state.username}
             />
           </div>
+          <ColorChooser
+            colors={this.allowedColors}
+            chosenIndex={this.state.chosenColorIndex}
+            onClick={this.handleColorChange.bind(this)}
+          />
           <input type="button" value="Choose!" className="submit-button" onClick={this.handleSubmit.bind(this)} />
         </form>
       </div>
@@ -216,7 +191,7 @@ class StatusBar extends React.Component {
   render() {
     return (
       <div id="status-bar">
-        Username: {this.props.username}
+        Username: <span style={{color: this.props.color}}>{this.props.username}</span>
       </div>
     );
   }
@@ -227,6 +202,7 @@ class App extends React.Component {
     super(props);
     this.state = {
       username: this.props.debug ? 'Joe' : null,
+      color: 'darkgreen',
       messages: exampleMessages
     };
   }
@@ -237,29 +213,29 @@ class App extends React.Component {
         return;
 
       return {
-        messages: state.messages.slice().concat({author: state.username, message})
+        messages: state.messages.slice().concat({author: state.username, color: state.color, message})
       };
     });
   }
 
-  handleChosenUsername(username) {
-    this.setState({username});
+  handleChosenUsernameAndColor(username, color) {
+    this.setState({username, color});
   }
 
   render() {
     return (
       <div id="app">
-        {this.state.username == null ? <UsernameModal onSubmit={this.handleChosenUsername.bind(this)}/> : null}
+        {this.state.username == null ? <UsernameModal onSubmit={this.handleChosenUsernameAndColor.bind(this)}/> : null}
 
         <div id="app-flex">
           <Messages messages={this.state.messages}/>
           <NewMessageForm onClick={(message) => this.handleNewMessage(message)}/>
           <GameArea />
-          <StatusBar username={this.state.username}/>
+          <StatusBar username={this.state.username} color={this.state.color}/>
         </div>
       </div>
     );
   }
 }
 
-ReactDOM.render(<App debug={true}/>, document.getElementById('root'));
+ReactDOM.render(<App debug={false}/>, document.getElementById('root'));
