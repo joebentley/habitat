@@ -9,40 +9,7 @@ import React from 'react';
 import UsernameModal from './components/username-modal.jsx';
 import NewMessageForm from './components/new-message.jsx';
 import MessagesList from './components/messages.jsx';
-
-class GameArea extends React.Component {
-  constructor(props) {
-    super(props);
-    this.canvas = React.createRef();
-  }
-
-  componentDidMount() {
-    this.updateCanvas();
-
-    window.onresize = this.updateCanvas.bind(this);
-  }
-
-  updateCanvas() {
-    const canvas = this.canvas.current;
-    canvas.width = canvas.clientWidth;
-    canvas.height = canvas.clientHeight;
-
-    const width = canvas.width;
-    const height = canvas.height;
-    const ctx = canvas.getContext('2d');
-
-    ctx.font = '20pt monospace';
-    ctx.fillText('PLACEHOLDER', width / 2 - 30, height / 2);
-  }
-
-  render() {
-    return (
-      <div id="canvas-container">
-        <canvas ref={this.canvas} id="canvas-area"/>
-      </div>
-    );
-  }
-}
+import GameArea from './components/game-area.jsx';
 
 class StatusBar extends React.Component {
   render() {
