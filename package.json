@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "express": "^4.16.3",
+    "mongoose": "^5.2.6",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-modal": "^3.5.1",
@@ -30,6 +31,7 @@
   },
   "scripts": {
     "start": "node index.js",
-    "serve-public": "webpack-serve --content public ./webpack.config.js"
+    "serve-public": "webpack-serve --content public ./webpack.config.js",
+    "nuke-database": "mongo test --eval \"db.dropDatabase();\""
   }
 }
