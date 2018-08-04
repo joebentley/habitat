@@ -139,12 +139,13 @@ class NewMessageForm extends React.Component {
       <form id="message-form">
         <input
           type="text"
+          className="text-input"
           id="new-message"
           onChange={this.handleChange.bind(this)}
           onKeyDown={this.handleKeyPress.bind(this)}
           value={this.state.message}
         />
-        <input type="button" id="send-message" value="Send!" onClick={this.handleSend.bind(this)}/>
+        <input type="button" className="submit-button" value="Send!" onClick={this.handleSend.bind(this)}/>
       </form>
     );
   }
@@ -160,31 +161,105 @@ class GameArea extends React.Component {
   }
 }
 
+class UsernameModal extends React.Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      username: ''
+    };
+  }
+
+  handleChange(e) {
+    this.setState({username: e.target.value});
+  }
+
+  handleKeyPress(e) {
+    if (e.key === 'Enter') {
+      this.handleSubmit();
+      e.preventDefault();
+    }
+  }
+
+  handleSubmit() {
+    let username = this.state.username;
+
+    if (username.length === 0)
+      return;
+
+    this.setState({username: ''});
+    this.props.onSubmit(username);
+  }
+
+  render() {
+    return (
+      <div id="username-modal">
+        <form>
+          <div>
+            <label htmlFor="username">Enter your username:</label>
+            <input
+              type="text"
+              className="text-input"
+              onChange={(e) => this.handleChange(e)}
+              onKeyDown={(e) => this.handleKeyPress(e)}
+              value={this.state.username}
+            />
+          </div>
+          <input type="button" value="Choose!" className="submit-button" onClick={this.handleSubmit.bind(this)} />
+        </form>
+      </div>
+    );
+  }
+}
+
+class StatusBar extends React.Component {
+  render() {
+    return (
+      <div id="status-bar">
+        Username: {this.props.username}
+      </div>
+    );
+  }
+}
+
 class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
+      username: this.props.debug ? 'Joe' : null,
       messages: exampleMessages
     };
   }
 
   handleNewMessage(message) {
     this.setState(state => {
+      if (state.username == null)
+        return;
+
       return {
-        messages: state.messages.slice().concat({author: 'Joe', message})
+        messages: state.messages.slice().concat({author: state.username, message})
       };
     });
+  }
+
+  handleChosenUsername(username) {
+    this.setState({username});
   }
 
   render() {
     return (
       <div id="app">
-        <Messages messages={this.state.messages}/>
-        <NewMessageForm onClick={(message) => this.handleNewMessage(message)}/>
-        <GameArea />
+        {this.state.username == null ? <UsernameModal onSubmit={this.handleChosenUsername.bind(this)}/> : null}
+
+        <div id="app-flex">
+          <Messages messages={this.state.messages}/>
+          <NewMessageForm onClick={(message) => this.handleNewMessage(message)}/>
+          <GameArea />
+          <StatusBar username={this.state.username}/>
+        </div>
       </div>
     );
   }
 }
 
-ReactDOM.render(<App />, document.getElementById('root'));
+ReactDOM.render(<App debug={true}/>, document.getElementById('root'));
