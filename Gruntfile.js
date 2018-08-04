@@ -41,7 +41,7 @@ module.exports = function(grunt) {
   grunt.loadNpmTasks('grunt-express-server');
   grunt.loadNpmTasks('grunt-run');
 
-  grunt.registerTask('build', ['webpack:dev']);
-  grunt.registerTask('server', [ 'express:dev', 'watch:express' ]);
-  grunt.registerTask('serve-public', ['run:public']);
+  grunt.registerTask('build', 'Build the public dist', ['webpack:dev']);
+  grunt.registerTask('server', 'Run the server-side app in watch mode', [ 'express:dev', 'watch:express' ]);
+  grunt.registerTask('serve-public', 'Run the public development server (webpack-serve)', ['run:public']);
 };
