@@ -48,7 +48,10 @@ class StatusBar extends React.Component {
   render() {
     return (
       <div id="status-bar">
-        Username: <span style={{color: this.props.color}}>{this.props.username}</span>
+        Username:&nbsp;
+        <a href="#" style={{color: this.props.color}} onClick={this.props.onNameClick}>
+          {this.props.username}
+        </a>
       </div>
     );
   }
@@ -58,8 +61,8 @@ class App extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      username: this.props.debug ? 'Joe' : null,
-      color: 'darkgreen',
+      username: this.props.debug ? 'Joe' : localStorage.getItem('username'),
+      color: localStorage.getItem('color') || 'darkgreen',
       messages: []
     };
     App.sendUsernameAndColor(this.state.username, this.state.color);
@@ -90,6 +93,8 @@ class App extends React.Component {
 
   handleChosenUsernameAndColor(username, color) {
     App.sendUsernameAndColor(username, color);
+    localStorage.setItem('username', username);
+    localStorage.setItem('color', color);
     this.setState({username, color});
   }
 
@@ -108,7 +113,11 @@ class App extends React.Component {
           <MessagesList messages={this.state.messages}/>
           <NewMessageForm onClick={(message) => this.handleNewMessage(message)}/>
           <GameArea />
-          <StatusBar username={this.state.username} color={this.state.color}/>
+          <StatusBar
+            username={this.state.username}
+            color={this.state.color}
+            onNameClick={() => this.handleChosenUsernameAndColor(null, null)}
+          />
         </div>
       </div>
     );
