@@ -94,10 +94,34 @@ class NewMessageForm extends React.Component {
 }
 
 class GameArea extends React.Component {
+  constructor(props) {
+    super(props);
+    this.canvas = React.createRef();
+  }
+
+  componentDidMount() {
+    this.updateCanvas();
+
+    window.onresize = this.updateCanvas.bind(this);
+  }
+
+  updateCanvas() {
+    const canvas = this.canvas.current;
+    canvas.width = canvas.clientWidth;
+    canvas.height = canvas.clientHeight;
+
+    const width = canvas.width;
+    const height = canvas.height;
+    const ctx = canvas.getContext('2d');
+
+    ctx.font = '20pt monospace';
+    ctx.fillText('PLACEHOLDER', width / 2 - 30, height / 2);
+  }
+
   render() {
     return (
       <div id="canvas-container">
-        <canvas id="canvas-area" />
+        <canvas ref={this.canvas} id="canvas-area"/>
       </div>
     );
   }
@@ -238,4 +262,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App debug={false}/>, document.getElementById('root'));
+ReactDOM.render(<App debug={true}/>, document.getElementById('root'));
