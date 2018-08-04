@@ -1,25 +1,7 @@
 
-import * as io from 'socket.io-client';
+import io from 'socket.io-client';
 
-window.onload = () => {
-  let socket = io.connect('localhost:3000');
-  socket.emit('hello', 'world', data => {
-    console.log(data);
-  });
-};
-
-const exampleMessages = [
-  {
-    'color': 'darkgreen',
-    'author': 'Joe',
-    'message': 'Hello Marie!'
-  },
-  {
-    'color': 'darkred',
-    'author': 'Marie',
-    'message': 'Hello Joe, how are you?'
-  }
-];
+const socket = io.connect('localhost:3000');
 
 import ReactDOM from 'react-dom';
 import React from 'react';
@@ -78,8 +60,17 @@ class App extends React.Component {
     this.state = {
       username: this.props.debug ? 'Joe' : null,
       color: 'darkgreen',
-      messages: exampleMessages
+      messages: []
     };
+    App.sendUsernameAndColor(this.state.username, this.state.color);
+  }
+
+  componentDidMount() {
+    socket.on('messages', messages => {
+      this.setState({messages});
+    });
+
+    socket.emit('get-messages');
   }
 
   handleNewMessage(message) {
@@ -87,14 +78,23 @@ class App extends React.Component {
       if (state.username == null)
         return;
 
+      let newMessage = {author: state.username, color: state.color, message};
+
+      socket.emit('new-message', newMessage);
+
       return {
-        messages: state.messages.slice().concat({author: state.username, color: state.color, message})
+        messages: state.messages.slice().concat(newMessage)
       };
     });
   }
 
   handleChosenUsernameAndColor(username, color) {
+    App.sendUsernameAndColor(username, color);
     this.setState({username, color});
+  }
+
+  static sendUsernameAndColor(username, color) {
+    socket.emit('set-username-and-color', {username, color});
   }
 
   render() {
@@ -115,4 +115,4 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App debug={true}/>, document.getElementById('root'));
+ReactDOM.render(<App debug={false}/>, document.getElementById('root'));
