@@ -89,18 +89,6 @@ export default class GameArea extends React.Component {
     };
   }
 
-  // componentDidMount() {
-  //   this.updateWidthAndHeight();
-  //   window.onresize = this.updateWidthAndHeight.bind(this);
-  // }
-  //
-  // updateWidthAndHeight() {
-  //   this.setState({
-  //     width: this.div.current.clientWidth,
-  //     height: this.div.current.clientHeight
-  //   });
-  // }
-
   render() {
     return (
       <div ref={this.div} id="game-container">
