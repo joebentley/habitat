@@ -65,6 +65,10 @@ class App extends React.Component {
     this.setState({username, color});
   }
 
+  handleChoosingNewUsernameAndColor() {
+    this.setState({username: null});
+  }
+
   static sendUsernameAndColor(username, color) {
     socket.emit('set-username-and-color', {username, color});
   }
@@ -83,7 +87,7 @@ class App extends React.Component {
           <StatusBar
             username={this.state.username}
             color={this.state.color}
-            onNameClick={() => this.handleChosenUsernameAndColor(null, null)}
+            onNameClick={this.handleChoosingNewUsernameAndColor.bind(this)}
           />
         </div>
       </div>
