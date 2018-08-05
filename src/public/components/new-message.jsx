@@ -1,4 +1,17 @@
 import React from 'react';
+import { StyledTextInput, StyledSubmit } from './misc-styled';
+import styled from 'styled-components';
+
+const StyledMessageForm = styled.form`
+  margin-top: 1px;
+  display: flex;
+  position: relative;
+  z-index: 1;
+`;
+
+const StyledMessageInput = StyledTextInput.extend`
+  width: 100%;
+`;
 
 export default class NewMessageForm extends React.Component {
   constructor(props) {
@@ -29,17 +42,15 @@ export default class NewMessageForm extends React.Component {
 
   render() {
     return (
-      <form id="message-form">
-        <input
+      <StyledMessageForm>
+        <StyledMessageInput
           type="text"
-          className="text-input"
-          id="new-message"
           onChange={this.handleChange.bind(this)}
           onKeyDown={this.handleKeyPress.bind(this)}
           value={this.state.message}
         />
-        <input type="button" className="submit-button" value="Send!" onClick={this.handleSend.bind(this)}/>
-      </form>
+        <StyledSubmit type="button" value="Send!" onClick={this.handleSend.bind(this)}/>
+      </StyledMessageForm>
     );
   }
 }

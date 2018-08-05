@@ -1,25 +1,71 @@
 import React from 'react';
+import styled from 'styled-components';
+import { StyledTextInput, StyledSubmit } from './misc-styled.jsx';
+
+const StyledColorBox = styled.div`
+  width: 1em;
+  height: 1em;
+  border: 2px solid ${props => props.chosen ? 'white' : 'darkslategrey'};
+  background-color: ${props => props.color}
+`;
+
+const StyledColorBoxContainer = styled.div`
+  margin-top: 1em;
+  display: flex;
+  justify-content: space-evenly;
+`;
 
 class ColorChooser extends React.Component {
   render() {
     let colorBoxes = this.props.colors.map((color, index) => {
       return (
-        <div
+        <StyledColorBox
           key={index}
-          style={{backgroundColor: color}}
+          color={color}
+          chosen={this.props.chosenIndex === index}
           onClick={() => this.props.onClick(index)}
-          className={'color-box' + (this.props.chosenIndex === index ? ' color-box-chosen' : '')}
         />
       );
     });
 
     return (
-      <div id="color-box-container">
+      <StyledColorBoxContainer>
         {colorBoxes}
-      </div>
+      </StyledColorBoxContainer>
     );
   }
 }
+
+const StyledUsernameModalSubmit = StyledSubmit.extend`
+  margin-top: 1em;
+`;
+
+const StyledUsernameModalTextInput = StyledTextInput.extend`
+  font-size: 10pt;
+`;
+
+const StyledEvenlySpacedFlexDiv = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
+const StyledUsernameModalForm = styled.form`
+  padding: 2em;
+  background-color: black;
+  text-align: center;
+`;
+
+const StyledUsernameModal = styled.div`
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  position: absolute;
+  z-index: 3;
+  background-color: rgba(0, 0, 0, 0.4);
+
+  padding: 43vh 5em 0 5em;
+`;
 
 export default class UsernameModal extends React.Component {
   constructor(props) {
@@ -60,26 +106,28 @@ export default class UsernameModal extends React.Component {
 
   render() {
     return (
-      <div id="username-modal">
-        <form>
-          <div>
+      <StyledUsernameModal>
+        <StyledUsernameModalForm>
+          <StyledEvenlySpacedFlexDiv>
             <label htmlFor="username">Enter your username:</label>
-            <input
+            <StyledUsernameModalTextInput
               type="text"
-              className="text-input"
               onChange={(e) => this.handleChange(e)}
               onKeyDown={(e) => this.handleKeyPress(e)}
               value={this.state.username}
             />
-          </div>
+          </StyledEvenlySpacedFlexDiv>
           <ColorChooser
             colors={this.allowedColors}
             chosenIndex={this.state.chosenColorIndex}
             onClick={this.handleColorChange.bind(this)}
           />
-          <input type="button" value="Choose!" className="submit-button" onClick={this.handleSubmit.bind(this)} />
-        </form>
-      </div>
+          <StyledUsernameModalSubmit
+            type="button"
+            value="Choose!"
+            onClick={this.handleSubmit.bind(this)} />
+        </StyledUsernameModalForm>
+      </StyledUsernameModal>
     );
   }
 }

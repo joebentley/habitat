@@ -6,23 +6,57 @@ const socket = io.connect('localhost:3000');
 import ReactDOM from 'react-dom';
 import React from 'react';
 
+import styled, { injectGlobal } from 'styled-components';
+
 import UsernameModal from './components/username-modal.jsx';
 import NewMessageForm from './components/new-message.jsx';
 import MessagesList from './components/messages.jsx';
 import GameArea from './components/game-area.jsx';
 
+injectGlobal`
+  body {
+    background-color: black;
+    color: white;
+    font-family: monospace;
+    font-size: 12pt;
+    padding: 0;
+    margin: 0;
+    overflow: hidden;
+  }
+`;
+
+const NoSelectDiv = styled.div`
+  user-select: none;
+`;
+
+const StyledStatusBar = NoSelectDiv.extend`
+  font-size: 10pt;
+  margin-left: 0.3em;
+  margin-top: -0.2em;
+`;
+
 class StatusBar extends React.Component {
   render() {
     return (
-      <div id="status-bar" className="no-select">
+      <StyledStatusBar>
         Username:&nbsp;
         <a href="#" style={{color: this.props.color}} onClick={this.props.onNameClick}>
           {this.props.username}
         </a>
-      </div>
+      </StyledStatusBar>
     );
   }
 }
+
+const StyledApp = styled.div`
+  height: 100vh;
+`;
+
+const StyledAppFlex = styled.div`
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+`;
 
 class App extends React.Component {
   constructor(props) {
@@ -75,22 +109,22 @@ class App extends React.Component {
 
   render() {
     return (
-      <div id="app">
+      <StyledApp>
         {this.state.username == null ?
           <UsernameModal onSubmit={this.handleChosenUsernameAndColor.bind(this)} />
           : null}
 
-        <div id="app-flex">
+        <StyledAppFlex>
           <MessagesList messages={this.state.messages}/>
           <NewMessageForm onClick={(message) => this.handleNewMessage(message)}/>
-          <GameArea playerColor={this.state.color}/>
+          <GameArea playerColor={this.state.color} width={800} height={500}/>
           <StatusBar
             username={this.state.username}
             color={this.state.color}
             onNameClick={this.handleChoosingNewUsernameAndColor.bind(this)}
           />
-        </div>
-      </div>
+        </StyledAppFlex>
+      </StyledApp>
     );
   }
 }

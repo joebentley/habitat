@@ -2,6 +2,8 @@ import React from 'react';
 import { Stage, Layer, Rect, Text } from 'react-konva';
 // import Konva from 'konva';
 
+import styled from 'styled-components';
+
 class Player extends React.Component {
   render() {
     return (
@@ -14,6 +16,11 @@ class Player extends React.Component {
     );
   }
 }
+
+const StyledGameStage = styled.div`
+  border-radius: 15px;
+  overflow: hidden;
+`;
 
 class GameStage extends React.Component {
   constructor(props) {
@@ -52,57 +59,61 @@ class GameStage extends React.Component {
     const floorLevel = this.props.parentHeight * (3 / 5);
 
     return (
-      <Stage
-        className="game-stage"
-        width={this.props.parentWidth}
-        height={this.props.parentHeight}
-        onClick={(e) => this.handleClick(e)}
-      >
-        <Layer>
-          <Rect
-            fill="blue"
-            width={this.props.parentWidth}
-            height={this.props.parentHeight}
-          />
+      <StyledGameStage>
+        <Stage
+          width={this.props.parentWidth}
+          height={this.props.parentHeight}
+          onClick={(e) => this.handleClick(e)}
+        >
+          <Layer>
+            <Rect
+              fill="blue"
+              width={this.props.parentWidth}
+              height={this.props.parentHeight}
+            />
 
-          <Rect
-            fill="green"
-            y={floorLevel}
-            width={this.props.parentWidth}
-            height={this.props.parentHeight}
-          />
+            <Rect
+              fill="green"
+              y={floorLevel}
+              width={this.props.parentWidth}
+              height={this.props.parentHeight}
+            />
 
-          <Player
-            x={this.state.xPosition}
-            y={floorLevel - 90}
-            color={this.props.playerColor}
-          />
-        </Layer>
-      </Stage>
+            <Player
+              x={this.state.xPosition}
+              y={floorLevel - 90}
+              color={this.props.playerColor}
+            />
+          </Layer>
+        </Stage>
+      </StyledGameStage>
     );
   }
 }
 
+const StyledGameArea = styled.div`
+  margin-top: 3px;
+  text-align: center;
+  background-color: black;
+  height: 500px;
+  width: 100%;
+  min-width: 800px;
+  z-index: 2;
+  position: relative;
+  display: flex;
+  justify-content: center;
+`;
+
 export default class GameArea extends React.Component {
-  constructor(props) {
-    super(props);
-    this.div = React.createRef();
-
-    this.state = {
-      width: 800,
-      height: 500
-    };
-  }
-
   render() {
     return (
-      <div ref={this.div} id="game-container">
+      <StyledGameArea>
         <GameStage
-          parentWidth={this.state.width}
-          parentHeight={this.state.height}
+          parentWidth={this.props.width}
+          parentHeight={this.props.height}
           playerColor={this.props.playerColor}
         />
-      </div>
+      </StyledGameArea>
     );
   }
 }
