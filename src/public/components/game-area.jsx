@@ -8,7 +8,8 @@ class Player extends React.Component {
       <Rect
         x={this.props.x} y={this.props.y}
         width="40" height="100"
-        fill="yellow"
+        fill={this.props.color}
+        stroke="white"
       />
     );
   }
@@ -71,7 +72,11 @@ class GameStage extends React.Component {
             height={this.props.parentHeight}
           />
 
-          <Player x={this.state.xPosition} y={floorLevel - 90} />
+          <Player
+            x={this.state.xPosition}
+            y={floorLevel - 90}
+            color={this.props.playerColor}
+          />
         </Layer>
       </Stage>
     );
@@ -95,6 +100,7 @@ export default class GameArea extends React.Component {
         <GameStage
           parentWidth={this.state.width}
           parentHeight={this.state.height}
+          playerColor={this.props.playerColor}
         />
       </div>
     );

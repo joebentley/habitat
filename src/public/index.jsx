@@ -79,7 +79,7 @@ class App extends React.Component {
         <div id="app-flex">
           <MessagesList messages={this.state.messages}/>
           <NewMessageForm onClick={(message) => this.handleNewMessage(message)}/>
-          <GameArea />
+          <GameArea playerColor={this.state.color}/>
           <StatusBar
             username={this.state.username}
             color={this.state.color}
