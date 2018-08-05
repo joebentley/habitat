@@ -14,7 +14,7 @@ import GameArea from './components/game-area.jsx';
 class StatusBar extends React.Component {
   render() {
     return (
-      <div id="status-bar">
+      <div id="status-bar" className="no-select">
         Username:&nbsp;
         <a href="#" style={{color: this.props.color}} onClick={this.props.onNameClick}>
           {this.props.username}
