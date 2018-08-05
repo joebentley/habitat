@@ -63,7 +63,7 @@ body {
   padding: 0;
   margin: 0;
 
-  height: 30%;
+  height: 28%;
   z-index: 1;
   position: relative;
   
@@ -123,7 +123,8 @@ body {
 
 #status-bar {
   font-size: 10pt;
-  margin-left: 0.2em;
+  margin-left: 0.3em;
+  margin-top: -0.2em;
 }
 
 #app-flex {
