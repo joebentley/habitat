@@ -64,17 +64,21 @@ class App extends React.Component {
     this.state = {
       username: this.props.debug ? 'Joe' : localStorage.getItem('username'),
       color: localStorage.getItem('color') || 'darkgreen',
+      xPosition: 0,
       messages: []
     };
-    App.sendUsernameAndColor(this.state.username, this.state.color);
   }
 
   componentDidMount() {
+    socket.on('connect', () => {
+      socket.emit('get-messages');
+      App.sendUsernameAndColor(this.state.username, this.state.color);
+      App.sendPosition(this.state.xPosition);
+    });
+
     socket.on('messages', messages => {
       this.setState({messages});
     });
-
-    socket.emit('get-messages');
   }
 
   handleNewMessage(message) {
@@ -105,6 +109,10 @@ class App extends React.Component {
 
   static sendUsernameAndColor(username, color) {
     socket.emit('set-username-and-color', {username, color});
+  }
+
+  static sendPosition(position) {
+    socket.emit('set-position', position);
   }
 
   render() {
